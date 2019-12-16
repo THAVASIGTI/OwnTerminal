@@ -128,37 +128,73 @@ def junkorg(src = os.getcwd()):
 	doc = (".oxps", ".epub", ".pages", ".docx", ".doc", ".fdf", ".ods",".odt", ".pwi", ".xsn", ".xps", ".dotx", ".docm", ".dox",".rvg", ".rtf", ".rtfd", ".wpd", ".xls", ".xlsx", ".ppt","pptx")
 	for root,die,folder in os.walk(src):
 		for fil in folder:
-			if fil.endswith(exe):
-				with open("exe.txt","a+") as f:
-					f.writelines(fil+"\n")
 			if fil.endswith(py):
-				with open("py.txt","a+") as f:
-					f.writelines(fil+"\n")
+				dest = os.path.join(src,"PY")
+				if not os.path.isdir(dest):
+					os.mkdir(dest)
+				# shutil.move(os.path.join(root,fil),dest)
+				shutil.copy(os.path.join(root,fil),dest)
 			if fil.endswith(pdf):
-				with open("pdf.txt","a+") as f:
-					f.writelines(fil+"\n")
-			if fil.endswith(html):
-				with open("html.txt","a+") as f:
-					f.writelines(fil+"\n")
-			if fil.endswith(img):
-				with open("image.txt","a+") as f:
-					f.writelines(fil+"\n")
-			if fil.endswith(vdo):
-				with open("video.txt","a+") as f:
-					f.writelines(fil+"\n")
-			if fil.endswith(doc):
-				with open("docutment.txt","a+") as f:
-					f.writelines(fil+"\n")
-			if fil.endswith(aci):
-				with open("achive.txt","a+") as f:
-					f.writelines(fil+"\n")
-			if fil.endswith(aud):
-				with open("adiuo.txt","a+") as f:
-					f.writelines(fil+"\n")
+				dest = os.path.join(src,"PDF")
+				if not os.path.isdir(dest):
+					os.mkdir(dest)
+				# shutil.move(os.path.join(root,fil),dest)
+				shutil.copy(os.path.join(root,fil),dest)
+			if fil.endswith(exe):
+				dest = os.path.join(src,"EXE")
+				if not os.path.isdir(dest):
+					os.mkdir(dest)
+				# shutil.move(os.path.join(root,fil),dest)
+				shutil.copy(os.path.join(root,fil),dest)
 			if fil.endswith(txt):
-				with open("PailnText.txt","a+") as f:
-					f.writelines(fil+"\n")
-
+				dest = os.path.join(src,"TXT")
+				if not os.path.isdir(dest):
+					os.mkdir(dest)
+				print(os.path.join(root,fil))
+				shutil.copy(os.path.join(root,fil),dest)
+				# shutil.move(os.path.join(root,fil),dest)
+			if fil.endswith(html):
+				dest = os.path.join(src,"HTML")
+				if not os.path.isdir(dest):
+					os.mkdir(dest)
+				# shutil.move(os.path.join(root,fil),dest)
+				print(os.path.join(root,fil))
+				shutil.copy(os.path.join(root,fil),dest)
+			if fil.endswith(img):
+				dest = os.path.join(src,"IMAGE")
+				if not os.path.isdir(dest):
+					os.mkdir(dest)
+				# shutil.move(os.path.join(root,fil),dest)
+				print(os.path.join(root,fil))
+				shutil.copy(os.path.join(root,fil),dest)
+			if fil.endswith(aci):
+				dest = os.path.join(src,"ZIPFILE")
+				if not os.path.isdir(dest):
+					os.mkdir(dest)
+				# shutil.move(os.path.join(root,fil),dest)
+				print(os.path.join(root,fil))
+				shutil.copy(os.path.join(root,fil),dest)
+			if fil.endswith(vdo):
+				dest = os.path.join(src,"VIDEO")
+				if not os.path.isdir(dest):
+					os.mkdir(dest)
+				# shutil.move(os.path.join(root,fil),dest)
+				print(os.path.join(root,fil))
+				shutil.copy(os.path.join(root,fil),dest)
+			if fil.endswith(aud):
+				dest = os.path.join(src,"AUDIO")
+				if not os.path.isdir(dest):
+					os.mkdir(dest)
+				# shutil.move(os.path.join(root,fil),dest)
+				print(os.path.join(root,fil))
+				shutil.copy(os.path.join(root,fil),dest)
+			if fil.endswith(doc):
+				dest = os.path.join(src,"DOCUMENTS")
+				if not os.path.isdir(dest):
+					os.mkdir(dest)
+				# shutil.move(os.path.join(root,fil),dest)
+				print(os.path.join(root,fil))
+				shutil.copy(os.path.join(root,fil),dest)	
 def diract(src):
 	global count
 	dirReplce = src.replace("cd ","")
