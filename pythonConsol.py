@@ -1,6 +1,7 @@
 import platform,os,sys,datetime,time,json,shutil
 from pathlib import Path
-import webbrowser
+import webbrowser,wikipedia
+import tkinter, tkinter.messagebox
 from getpass import getpass
 
 
@@ -10,7 +11,7 @@ def main():
 	try:
 		usr,pwd,sysName,sysUser = secure()
 		while True:
-			c = str(input(sysUser+"@"+sysName+": "+diract(".")+"__$ "))
+			c = str(input(usr+"@"+sysName+": "+diract(".")+"__$ "))
 			history(c)
 			commandLib(c)
 			continue
@@ -36,6 +37,7 @@ def commandLib(ex):
 			else:
 				os.system("ifconfig")
 		elif ex == "time":
+			tkInfo("Time",datetime.datetime.now())
 			return print(datetime.datetime.now())
 		elif ex in ["ls","l","dir"]:
 			for ls in readDir():
@@ -46,10 +48,12 @@ def commandLib(ex):
 		elif ex.startswith("cd "):
 			diract(ex)
 		elif ex == "broswer":
+			tkInfo("Browser","Opne Now")
 			webbrowser.open("https://www.google.com")
 		elif ex == "exit":
 			exit(0)
 		elif ex == "power off":
+			tkInfo("Power Off","few minutiue power off")
 			if platform.system() == 'Windows':
 				os.system("shutdown /s")
 			else:
@@ -60,9 +64,12 @@ def commandLib(ex):
 				dest = str(input("dest => "))
 				if os.name == "posix":
 					os.system("cp -rf "+src+" "+dest)
+					tkInfo("copy","complited !!!")
 				else:
 					os.system("xcopy "+src+" "+dest+" /i/e/h/s/y")
+					tkInfo("copy","complited !!!")
 			except Exception as e:
+				tkWarr("copy","check File")
 				print(e)
 		elif ex == "move":
 			try:
@@ -70,9 +77,12 @@ def commandLib(ex):
 				dest = str(input("dest => "))
 				if os.name == "posix":
 					os.system("mv -rf "+src+" "+dest)
+					tkInfo("move","complited !!!")
 				else:
 					os.system("move "+src+" "+dest)
+					tkInfo("copy","complited !!!")
 			except Exception as e:
+				tkWarr("move","check File")
 				print(e)
 		elif ex == "delete":
 			try:
@@ -83,39 +93,103 @@ def commandLib(ex):
 					delPath = delete.split(" ")[1]
 					if os.name == "posix":
 						os.system("rm -rf "+delete)
+						tkInfo("Deleted","successfully ...")
 					else:
 						if os.path.isdir(delPath):
 							os.system("rmdir /Q/S "+delPath)
+							tkInfo("Deleted","successfully ...")
 						elif os.path.isfile(delPath):
 							os.system("del "+delPath+" /f/s/q")
+							tkInfo("Deleted","successfully ...")
 						else:
 							shutil.rmtree(delPath)
+							tkInfo("Deleted","successfully ...")
 				else:
 					if delete in readDir():
 						delPath = os.path.join(cwd(),delete)
 						if os.name == "posix":
 							os.system("rm -rf "+delete)
+							tkInfo("Deleted","successfully ...")
 						else:
 							if os.path.isdir(delPath):
 								os.system("rmdir /Q/S "+delPath)
+								tkInfo("Deleted","successfully ...")
 							elif os.path.isfile(delPath):
 								os.system("del "+delPath+" /f/s/q")
+								tkInfo("Deleted","successfully ...")
 							else:
-								shutil.rmtree(delPath)	
+								shutil.rmtree(delPath)
+								tkInfo("Deleted","successfully ...")
 			except Exception as e:
+				tkWarr("Deleted","check file")
 				print(e)
 		elif ex.startswith("@"):
 			os.system(exsystem)
 		elif ex == "_admin_":
 			print(os.environ)
-		elif ex == "org":
+		elif ex == "wiki":
+			wiki()
+		elif ex == "article":
+			article()
+		elif ex == "fileOrg":
 			src = str(input("Enter path: \n"))
 			junkorg(src)
+		elif ex == ".":
+			exit(0)
 		else:
 			os.system(ex)
 			print( )
 
-def junkorg(src = os.getcwd()):
+def wiki():
+	query = str(input(("*")*25+" WEB SEARCH "+("*")*25+"\n"+"Enter Search Queryes:\n"))
+	arrQuery = wikipedia.search(query)
+	print(("=")*40+"\nFind Relative Title Form :"+'"'+query+'"'+"\n"+("=")*40)
+	try:
+		while True:
+			print("\n")
+			for li in arrQuery:
+				print(li)
+			serQuery = str(input("\nEnter Query Title: ( type 'y' exit )\n"))
+			if serQuery.lower() == "y":
+				break
+			else:
+				speCheck = wikipedia.suggest(serQuery)
+				if speCheck == None:
+					content = wikipedia.page(serQuery).content
+				else:
+					content = wikipedia.page(speCheck).content
+			print(content)
+	except Exception:
+		print("This Title "+serQuery+"not found")
+		wiki()
+	
+
+def article():
+	query = str(input(("*")*50+"Info Article Gobel"+("*")*50+"\n"+"Enter Search Queryes:\n"))
+	arrQuery = wikipedia.search(query)
+	print(("=")*40+"\nFind Relative Title Form :"+'"'+query+'"'+"\n"+("=")*40)
+	try:
+		while True:
+			print("\n")
+			for li in arrQuery:
+				print(li)
+			serQuery = str(input("\nEnter Query Title: ( type 'y' exit )\n"))
+			if serQuery.lower() == "y":
+				break
+			else:
+				speCheck = wikipedia.suggest(serQuery)
+				if speCheck == None:
+					content = wikipedia.summary(serQuery)
+				else:
+					content = wikipedia.summary(speCheck)
+			print(content)
+	except Exception:
+		print("This Title "+serQuery+"not found")
+		article()
+
+def junkorg(src):
+	if src == ".":
+		src = diract(".")
 	py = (".py")
 	pdf = (".pdf")
 	exe = (".exe")
@@ -194,7 +268,10 @@ def junkorg(src = os.getcwd()):
 					os.mkdir(dest)
 				# shutil.move(os.path.join(root,fil),dest)
 				print(os.path.join(root,fil))
-				shutil.copy(os.path.join(root,fil),dest)	
+				shutil.copy(os.path.join(root,fil),dest)
+		else:
+			tkInfo("GTI file system","complited to work ...")
+
 def diract(src):
 	global count
 	dirReplce = src.replace("cd ","")
@@ -239,6 +316,7 @@ def secure():
 			userName = str(input("Enter User Name:__$ "))
 			passWord = str(getpass("Enter Pass Word:__$ "))
 			sysJson = '{"usr":"'+userName+'","pwd":"'+passWord+'"}'
+			tkInfo("Secure","user and password complited !!!")
 			print(filePath)
 			with open(filePath,"w") as f:
 				json.dump(sysJson,f)
@@ -257,10 +335,12 @@ def secure():
 			return usr,pwd,sysName,sysUser
 	else:
 		if not os.path.isfile(filePath):
+			tkEror("Secure","Sorry Missing authorid \n Try again !!!")
 			sysName = platform.node()
 			userName = str(input("Enter User Name:__$ "))
 			passWord = str(getpass("Enter Pass Word:__$ "))
 			sysJson = '{"usr":"'+userName+'","pwd":"'+passWord+'"}'
+			tkInfo("Secure","user and password complited !!!")
 			print(filePath)
 			with open(filePath,"w") as f:
 				json.dump(sysJson,f)
@@ -308,6 +388,21 @@ def cwd():
 	with open(tryFileInpath,"r") as f:
 			readLine = f.readline().rstrip()
 	return readLine
+
+def tkInfo(top,mess):
+	root = tkinter.Tk()
+	root.withdraw()
+	tkinter.messagebox.showinfo(top,mess)
+
+def tkWarr(top,mess):
+	root = tkinter.Tk()
+	root.withdraw()
+	tkinter.messagebox.showwarning(top,mess)
+
+def tkEror(top,mess):
+	root = tkinter.Tk()
+	root.withdraw()
+	tkinter.messagebox.showerror(top,mess)	
 
 if __name__=="__main__":
 	main()
